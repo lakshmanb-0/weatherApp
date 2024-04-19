@@ -1,19 +1,20 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
-import { TypeGeoNames } from '../types'
-import { getGeoNames, getSearchData } from '../actions'
+import { TypeGeoNames, TypeSearchOptions } from '../types'
+import { getGeoNames, getSearchData } from '../../actions'
 import Link from 'next/link'
 import { IoMdLocate } from "react-icons/io";
 import { useRouter } from 'next/navigation'
 import { useToast } from '../hooks/useToast'
+import { TbLocationCheck } from 'react-icons/tb'
 
 const TableView = ({ data }: { data: TypeGeoNames[] }) => {
     const [sortedData, setSortedData] = useState<TypeGeoNames[]>(data)
     const [filter, setFilter] = useState<string>('limit')
     const [search, setSearch] = useState<string>('')
-    const [loading, setLoading] = useState(false)
-    const [searchOption, setSearchOption] = useState([])
+    const [loading, setLoading] = useState<boolean>(false)
+    const [searchOption, setSearchOption] = useState<TypeSearchOptions[]>([])
     const [limit, setLimit] = useState<number>(20)
     const infinityRef = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
@@ -21,10 +22,12 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
     const router = useRouter()
     const showToast = useToast()
 
+    // Fetch data from GeoNames API based on filter
     useEffect(() => {
         fetchFIlterDAta(sortedData)
     }, [filter])
 
+    // Handle infinity scroll and update limit state
     useEffect(() => {
         const observer = new IntersectionObserver(entries => {
             const first = entries[0];
@@ -42,6 +45,7 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
         };
     }, []);
 
+    // Fetch data from GeoNames API based on scroll
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
@@ -55,8 +59,7 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
         fetchData()
     }, [limit])
 
-    console.log(limit);
-
+    // Handle Filter state according to user selection
     const fetchFIlterDAta = async (data: TypeGeoNames[]) => {
         setLoading(true)
 
@@ -86,6 +89,7 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
         setLoading(false)
     }
 
+    // Handle onclick of filter option 
     const handleFilter = (filterOption: string) => {
         switch (filterOption) {
             case 'name':
@@ -100,14 +104,17 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
         }
     }
 
+    // Handle Search input on change and update search option 
     useEffect(() => {
         const handleSearchData = async () => {
             let data = (search == '' ? [] : await getSearchData(search))
+
             setSearchOption(data)
         }
         search.length && handleSearchData()
     }, [search])
 
+    // Handle Search input on enter key press and update search query state with user input value
     const handleSearchEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && search.length > 0) {
             e.preventDefault()
@@ -118,6 +125,7 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
         }
     }
 
+    // Fetch Geo Location based on user permission
     const fetchGeoLocation = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -131,32 +139,41 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
 
     return (
         <div>
-            <div className=' w-[90%] sm:w-fit mx-auto text-center mt-5 sm:mt-10 relative'>
-                <input type="text"
-                    placeholder='Search'
-                    value={search}
-                    onKeyDown={handleSearchEnter}
-                    onChange={(e) => setSearch(e.target.value)}
-                    ref={inputRef}
-                    className='px-3 py-2 rounded-3xl outline-none border-2 border-transparent dark:bg-darkBlue focus-within:border-skyBlue pr-5 w-full' />
-                <div className='absolute top-3 right-3 cursor-pointer' onClick={fetchGeoLocation}><IoMdLocate size={20} /></div>
-
+            <section className='w-fit mx-auto flex mt-5 sm:mt-10 items-center gap-4 px-2'>
                 <div className='relative'>
-                    <ul className={`absolute top-1 w-full bg-white dark:bg-darkBlue z-10 ${(inputRef?.current?.value && inputRef?.current === document.activeElement) ? 'block' : 'hidden'} shadow-lg`}>
-                        {
-                            (searchOption?.length && search != '')
-                                ? searchOption?.map((item: TypeGeoNames, index: number) => (
-                                    <li key={index} className='p-1 hover:bg-gray-100 dark:hover:bg-skyBlue'>
-                                        <Link href={`/weather/${item.coordinates.lat}/${item.coordinates.lon}`} className='block' replace>{item.name + ', ' + item.cou_name_en}
-                                        </Link>
-                                    </li>
-                                ))
-                                : (search !== '' && <li className='py-1'>No data found</li>)
-                        }
-                    </ul>
-                </div>
+                    <input type="text"
+                        placeholder='Search'
+                        value={search}
+                        onKeyDown={handleSearchEnter}
+                        onChange={(e) => setSearch(e.target.value)}
+                        ref={inputRef}
+                        className='px-3 py-2 rounded-3xl outline-none border-2 border-transparent dark:bg-darkBlue focus-within:border-skyBlue pr-9 w-full' />
+                    <div className='absolute top-3 right-3 cursor-pointer ' onClick={fetchGeoLocation}><IoMdLocate size={20} /></div>
 
-            </div>
+                    <div className='relative'>
+                        <ul className={`absolute top-1 w-full bg-white dark:bg-darkBlue z-10 ${(inputRef?.current?.value && inputRef?.current === document.activeElement) ? 'block' : 'hidden'} shadow-lg`}>
+                            {
+                                (searchOption?.length && search != '')
+                                    ? searchOption?.map((item: TypeSearchOptions, index: number) => (
+                                        <li key={index} className='px-3 py-2 hover:bg-gray-100 dark:hover:bg-skyBlue'>
+                                            <Link href={`/weather/${item.coordinates.lat}/${item.coordinates.lon}`} className='block' replace>{item.name + ', ' + item.cou_name_en}
+                                            </Link>
+                                        </li>
+                                    ))
+                                    : (search !== '' && <li className='py-1'>No data found</li>)
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <Link href={`/locations`} className=''
+                        title='Check previous locations'
+                    >
+                        <TbLocationCheck size={20} />
+                    </Link>
+                </div>
+            </section>
+
             <div className='m-4 sm:m-10 relative'>
                 <table className='w-full bg-white dark:bg-darkBlue rounded-3xl table-fixed '>
                     <thead >

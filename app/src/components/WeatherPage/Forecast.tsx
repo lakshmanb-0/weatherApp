@@ -1,7 +1,7 @@
 'use client'
-import { RootState } from '@/app/store/store'
-import { TypeWeatherData, TypeWeatherForecast } from '@/app/types'
-import { getImageWeather, toggleUnits, toggleWind } from '@/app/utils/utils'
+import { RootState } from '@/app/src/store/store'
+import { TypeWeatherData, TypeWeatherForecast } from '@/app/src/types'
+import { getImageWeather, toggleUnits, toggleWind } from '@/app/src/utils/utils'
 import moment from 'moment'
 import Image from 'next/image'
 import React, { FC, useEffect, useState } from 'react'
@@ -66,7 +66,7 @@ const ForecastList = ({ forecastData, selectedDay }: { forecastData: TypeWeather
 const ForecastItem = ({ item }: { item: TypeWeatherData }) => {
     const { main, weather, wind } = item;
     const { speed, deg } = wind;
-    const { units } = useSelector((state: RootState) => state);
+    const units = useSelector((state: RootState) => state.units);
 
     return (
         <div className='grid grid-cols-2 items-center gap-2 border-b-[1px] border-lightGray/20 py-4 px-2 last:border-0'>

@@ -1,5 +1,5 @@
 import { getBasicWeather, getForecastWeather } from '@/app/actions'
-import { ClientWeather } from '@/app/components'
+import { ClientWeather } from '@/app/src/components'
 import React from 'react'
 
 const page = async ({ params: { lat, lon } }: { params: { lat: number, lon: number } }) => {

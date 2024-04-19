@@ -1,7 +1,7 @@
 'use client'
-import { addLocalStorage, previousLocations } from '@/app/store/dataSlice'
-import { RootState } from '@/app/store/store'
-import { toggleUnits } from '@/app/utils/utils'
+import { addLocalStorage, previousLocations } from '@/app/src/store/dataSlice'
+import { RootState } from '@/app/src/store/store'
+import { toggleUnits } from '@/app/src/utils/utils'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
@@ -33,7 +33,7 @@ const Page = () => {
     )
 
     return (
-        <div className='p-4 sm:p-8 max-w-7xl mx-auto'>
+        <div className='p-4 sm:p-8 max-Width'>
             <p className=' flex  items-center mb-5 cursor-pointer' onClick={() => router.back()}><IoIosArrowBack /> Back</p>
             <h1 className='font-bold text-3xl'>Favorite:</h1>
             <div className='grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 sm:gap-3 items-center'>

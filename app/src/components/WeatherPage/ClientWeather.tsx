@@ -1,9 +1,9 @@
 'use client'
 import React, { FC, useEffect } from 'react'
 import { Navbar, Forecast, TodayWeather, WeatherCategory, Sunrise } from '../index'
-import { TypeWeatherData, TypeWeatherForecast } from '@/app/types';
+import { TypeWeatherData, TypeWeatherForecast } from '@/app/src/types';
 import { useDispatch } from 'react-redux';
-import { addLocalStorage, addPreviousLocation } from '@/app/store/dataSlice';
+import { addLocalStorage, addPreviousLocation } from '@/app/src/store/dataSlice';
 
 type Props = {
     weatherData: TypeWeatherData,
@@ -31,9 +31,9 @@ const ClientWeather: FC<Props> = ({ weatherData, forecastData }) => {
 
 
     return (
-        <section className='h-screen w-full p-4 sm:p-7'>
+        <section className='h-screen w-full p-4 sm:p-7 max-Width'>
             <Navbar weatherData={weatherData} />
-            <div className='grid sm:grid-cols-2 gap-7 py-5 w-full'>
+            <div className='grid md:grid-cols-2 gap-7 py-5 w-full'>
                 <div >
                     <TodayWeather weatherData={weatherData} />
                     <WeatherCategory weatherData={weatherData} />

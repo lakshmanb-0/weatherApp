@@ -1,7 +1,7 @@
 'use client'
-import { toggleFavoriteLocation } from '@/app/store/dataSlice'
-import { RootState } from '@/app/store/store'
-import { TypeWeatherData } from '@/app/types'
+import { toggleFavoriteLocation } from '@/app/src/store/dataSlice'
+import { RootState } from '@/app/src/store/store'
+import { TypeWeatherData } from '@/app/src/types'
 import Link from 'next/link'
 import React, { FC, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -51,7 +51,7 @@ const Navbar: FC<{ weatherData: TypeWeatherData }> = ({ weatherData }) => {
                 {getHeartIcon()}{weatherData.name}
             </h1>
             <div className='ml-auto flex gap-5 items-center'>
-                <Link href={`/weather/${weatherData.coord.lat}/${weatherData.coord.lon}/locations`}
+                <Link href={`/locations`}
                     title='Check previous locations'
                 >
                     <TbLocationCheck size={20} />

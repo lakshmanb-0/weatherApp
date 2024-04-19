@@ -3,3 +3,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@layer base {
+    html {
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .max-Width {
+        @apply max-w-[1400px] mx-auto
+    }
+}

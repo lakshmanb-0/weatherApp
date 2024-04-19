@@ -1,4 +1,4 @@
-import { TypeWeatherData } from '@/app/types'
+import { TypeWeatherData } from '@/app/src/types'
 import moment from 'moment'
 import React, { FC } from 'react'
 import { FiSunrise, FiSunset } from "react-icons/fi";

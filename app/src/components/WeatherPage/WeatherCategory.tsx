@@ -1,12 +1,14 @@
 'use client'
 import { getAirCondition } from '@/app/actions';
-import { RootState } from '@/app/store/store';
-import { TypeWeatherData } from '@/app/types'
-import { airQuality, toggleWind } from '@/app/utils/utils';
+import { RootState } from '@/app/src/store/store';
+import { TypeWeatherData } from '@/app/src/types'
+import { airQuality, toggleUnits, toggleWind } from '@/app/src/utils/utils';
 import React, { FC, useEffect, useState } from 'react'
 import { LuWind, LuEye } from "react-icons/lu";
 import { MdOutlineWaterDrop } from "react-icons/md";
 import { TiWeatherWindyCloudy } from "react-icons/ti";
+import { FaTemperatureHigh } from "react-icons/fa";
+import { TbCircuitGround } from "react-icons/tb";
 import { useSelector } from 'react-redux';
 
 const WeatherCategory: FC<{ weatherData: TypeWeatherData }> = ({ weatherData }) => {
@@ -26,41 +28,50 @@ const WeatherCategory: FC<{ weatherData: TypeWeatherData }> = ({ weatherData }) 
         {
             title: 'Air Quality',
             icon: TiWeatherWindyCloudy,
-            content: airQuality(airCondition) ?? 0
+            value: airQuality(airCondition),
+            endValue: '',
+
         },
         {
             title: 'Wind',
             icon: LuWind,
-            content: toggleWind(weatherData.wind.speed, weatherData.wind.deg, unitSystem),
+            value: toggleWind(weatherData.wind.speed, weatherData.wind.deg, unitSystem),
+            endValue: unitSystem === 'metric' ? 'm/s' : 'mph',
         },
         {
             title: 'Humidity',
             icon: MdOutlineWaterDrop,
-            content: `${weatherData.main.humidity}%`,
+            value: weatherData.main.humidity,
+            endValue: '%',
         },
         {
             title: 'Visibility',
             icon: LuEye,
-            content: `${weatherData.visibility / 1000} km`,
+            value: weatherData.visibility / 1000,
+            endValue: 'km',
         },
         {
             title: 'Pressure',
-            content: `${weatherData.main.pressure} hpa`,
+            icon: TbCircuitGround,
+            value: weatherData.main.pressure,
+            endValue: 'hpa',
         },
         {
-            title: 'Ground Level',
-            content: `${weatherData.main.grnd_level} hpa`,
+            title: 'Temperature',
+            icon: FaTemperatureHigh,
+            value: toggleUnits(weatherData.main.temp_min, unitSystem) + ' - ' + toggleUnits(weatherData.main.temp_max, unitSystem),
+            endValue: unitSystem === 'metric' ? '°C' : '°F',
         },
     ];
 
     return (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-5 py-5">
-            {categoriesData.map((item: any, index) => (
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 py-5">
+            {categoriesData.map((item: any, index) => !!item.value && (
                 <div key={index} className="p-5 bg-white dark:bg-darkBlue rounded-2xl flex gap-4">
-                    <div className="mt-1">{item.icon}</div>
+                    <item.icon size={20} className='mt-1' />
                     <div>
                         <p className="dark:text-darkGray">{item.title}</p>
-                        <p className="text-darkBlue dark:text-white font-semibold text-base sm:text-xl">{item.content}</p>
+                        <p className="text-darkBlue dark:text-white font-semibold text-base sm:text-lg">{item.value} {item.endValue}</p>
                     </div>
                 </div>
             ))}

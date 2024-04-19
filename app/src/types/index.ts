@@ -93,3 +93,11 @@ export interface TypeWeatherForecast {
     };
 }
 
+export interface TypeSearchOptions {
+    name: string;
+    coordinates: {
+        lat: number;
+        lon: number;
+    };
+    cou_name_en: string
+}
