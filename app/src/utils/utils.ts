@@ -87,38 +87,38 @@ export const getImageWeather = (IconCode: string) => {
 export const getVideoWeather = (IconCode: string) => {
     switch (IconCode) {
         case "01d":
-            return 'https://videos.pexels.com/video-files/5304549/5304549-uhd_3840_2160_30fps.mp4'
+            return 'https://videos.pexels.com/video-files/1542008/1542008-hd_1280_720_30fps.mp4'
         case "01n":
-            return 'https://videos.pexels.com/video-files/905250/905250-hd_1920_1080_30fps.mp4'
+            return 'https://videos.pexels.com/video-files/905250/905250-hd_1280_720_30fps.mp4'
         case "02d":
-            return 'https://videos.pexels.com/video-files/5288342/5288342-hd_1920_1080_30fps.mp4'
+            return 'https://videos.pexels.com/video-files/5288342/5288342-hd_1280_720_30fps.mp4'
         case "02n":
-            return 'https://videos.pexels.com/video-files/6601416/6601416-hd_1920_1080_30fps.mp4'
+            return 'https://videos.pexels.com/video-files/6601416/6601416-hd_1280_720_60fps.mp4'
         case "03d":
         case "04d":
-            return 'https://videos.pexels.com/video-files/2935032/2935032-uhd_3840_2160_30fps.mp4'
+            return 'https://videos.pexels.com/video-files/5262509/5262509-hd_1280_720_30fps.mp4'
         case "03n":
         case "04n":
-            return 'https://videos.pexels.com/video-files/6960047/6960047-hd_1920_1080_30fps.mp4'
+            return 'https://videos.pexels.com/video-files/6960047/6960047-hd_1280_720_30fps.mp4'
         case "09d":
         case "10d":
-            return 'https://videos.pexels.com/video-files/5100156/5100156-hd_1920_1080_30fps.mp4'
+            return 'https://videos.pexels.com/video-files/5100156/5100156-hd_1280_720_60fps.mp4'
         case "09n":
         case "10n":
-            return 'https://videos.pexels.com/video-files/5197762/5197762-uhd_3840_2160_25fps.mp4'
+            return 'https://videos.pexels.com/video-files/1484703/1484703-hd_1920_1080_25fps.mp4'
         case "11d":
-            return 'https://videos.pexels.com/video-files/6190836/6190836-hd_1920_1080_30fps.mp4'
+            return 'https://videos.pexels.com/video-files/6190836/6190836-hd_1280_720_30fps.mp4'
         case "11n":
             return 'https://videos.pexels.com/video-files/5908584/5908584-hd_1920_1080_25fps.mp4'
         case "13d":
-            return 'https://videos.pexels.com/video-files/6471377/6471377-uhd_4096_2160_24fps.mp4'
+            return 'https://videos.pexels.com/video-files/1856985/1856985-hd_1920_1080_25fps.mp4'
         case "13n":
-            return 'https://videos.pexels.com/video-files/6933752/6933752-uhd_4096_2160_24fps.mp4'
+            return 'https://videos.pexels.com/video-files/6527135/6527135-hd_1920_1080_25fps.mp4'
         case "50d":
         case "50n":
-            return 'https://videos.pexels.com/video-files/3028395/3028395-uhd_3840_2160_24fps.mp4'
+            return 'https://videos.pexels.com/video-files/1779202/1779202-hd_1280_720_25fps.mp4'
         default:
-            return 'https://videos.pexels.com/video-files/5304549/5304549-uhd_3840_2160_30fps.mp4'
+            return 'https://videos.pexels.com/video-files/1542008/1542008-hd_1280_720_30fps.mp4'
     }
 }
 

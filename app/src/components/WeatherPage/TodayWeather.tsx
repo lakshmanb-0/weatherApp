@@ -62,7 +62,10 @@ const TodayWeather: FC<{ weatherData: TypeWeatherData }> = ({ weatherData }) => 
                 </div>
             </div>
             <div className='absolute w-full h-full top-0 left-0 -z-10 rounded-2xl bg-white'>
-                <video src={getVideoWeather(weatherData.weather[0].icon)} autoPlay loop muted className='object-cover w-[110%] h-full bg-transparent' />
+                <video src={getVideoWeather(weatherData.weather[0].icon)} autoPlay loop muted className='object-cover w-[110%] h-full bg-transparent'>
+                    <source src={getVideoWeather(weatherData.weather[0].icon)} type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
             </div>
 
         </section>
