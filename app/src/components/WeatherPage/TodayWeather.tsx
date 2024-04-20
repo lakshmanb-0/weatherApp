@@ -2,13 +2,13 @@
 import { setUnits } from '@/app/src/store/dataSlice'
 import { RootState } from '@/app/src/store/store'
 import { TypeWeatherData } from '@/app/src/types'
-import { getImageWeather, getVideoWeather, toggleUnits } from '@/app/src/utils/utils'
+import { getImageWeather, toggleUnits } from '@/app/src/utils/utils'
 import moment from 'moment'
 import Image from 'next/image'
 import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-const TodayWeather: FC<{ weatherData: TypeWeatherData }> = ({ weatherData }) => {
+const TodayWeather: FC<{ weatherData: TypeWeatherData, videoUrl: string }> = ({ weatherData, videoUrl }) => {
     const unitSystem = useSelector((state: RootState) => state.units)
     const [currentTime, setCurrentTime] = useState<string>(moment().format('dddd, hh:mm A'))
     const dispatch = useDispatch()
@@ -62,8 +62,8 @@ const TodayWeather: FC<{ weatherData: TypeWeatherData }> = ({ weatherData }) => 
                 </div>
             </div>
             <div className='absolute w-full h-full top-0 left-0 -z-10 rounded-2xl bg-white'>
-                <video src={getVideoWeather(weatherData.weather[0].icon)} autoPlay loop muted className='object-cover w-[110%] h-full bg-transparent'>
-                    <source src={getVideoWeather(weatherData.weather[0].icon)} type="video/mp4" />
+                <video src={videoUrl} autoPlay loop muted className='object-cover w-[110%] h-full bg-transparent'>
+                    <source src={videoUrl} type="video/mp4" />
                     Your browser does not support the video tag.
                 </video>
             </div>

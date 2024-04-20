@@ -22,7 +22,7 @@ const WeatherCategory: FC<{ weatherData: TypeWeatherData }> = ({ weatherData }) 
             setAirCondition(airCondition.main.aqi)
         }
         fetchAir(weatherData.coord.lat, weatherData.coord.lon)
-    })
+    }, [])
 
     const categoriesData = [
         {

@@ -16,9 +16,9 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
     const [loading, setLoading] = useState<boolean>(false)
     const [searchOption, setSearchOption] = useState<TypeSearchOptions[]>([])
     const [limit, setLimit] = useState<number>(20)
-    const infinityRef = useRef<HTMLDivElement>(null)
-    const inputRef = useRef<HTMLInputElement>(null)
     const [searchQuery, setSearchQuery] = useState('')
+    const infinityRef = useRef<HTMLDivElement>(null)
+    const inputOptionRef = useRef<HTMLUListElement>(null)
     const router = useRouter()
     const showToast = useToast()
 
@@ -26,6 +26,14 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
     useEffect(() => {
         fetchFIlterDAta(sortedData)
     }, [filter])
+
+    useEffect(() => {
+        let session = JSON.parse(sessionStorage.getItem('limit')!)
+        if (session) {
+            setLimit(session.limit)
+            setSearchQuery(session.searchQuery)
+        }
+    }, [])
 
     // Handle infinity scroll and update limit state
     useEffect(() => {
@@ -53,6 +61,7 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
             if (data?.message) { showToast(data?.message, 'error') }
             else {
                 fetchFIlterDAta(data.results)
+                sessionStorage.setItem('limit', JSON.stringify({ limit: limit, searchQuery: searchQuery }));
             }
             setLoading(false)
         }
@@ -108,7 +117,6 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
     useEffect(() => {
         const handleSearchData = async () => {
             let data = (search == '' ? [] : await getSearchData(search))
-
             setSearchOption(data)
         }
         search.length && handleSearchData()
@@ -120,8 +128,8 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
             e.preventDefault()
             setFilter('')
             setSearchQuery(`&where=search(name,"${search}")`)
-            setLimit(prev => prev == 10 ? 20 : 10)
-            setSearch('')
+            setLimit(prev => prev == 30 ? 20 : 30)
+            // setSearch('')
         }
     }
 
@@ -137,21 +145,40 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
         }
     };
 
+    // Reset Table
+    const resetTable = () => {
+        setFilter('')
+        setSearchQuery('')
+        setLimit(20)
+        setSearch('')
+    }
+
     return (
         <div>
             <section className='w-fit mx-auto flex mt-5 sm:mt-10 items-center gap-4 px-2'>
-                <div className='relative'>
+                <div className='relative'
+                    onMouseLeave={() => {
+                        if (inputOptionRef && inputOptionRef.current) {
+                            inputOptionRef.current.style.display = 'none';
+                        }
+                    }}
+                    onMouseEnter={() => {
+                        if (inputOptionRef && inputOptionRef.current) {
+                            inputOptionRef.current.style.display = 'block';
+                        }
+                    }}
+                >
                     <input type="text"
                         placeholder='Search'
                         value={search}
                         onKeyDown={handleSearchEnter}
                         onChange={(e) => setSearch(e.target.value)}
-                        ref={inputRef}
                         className='px-3 py-2 rounded-3xl outline-none border-2 border-transparent dark:bg-darkBlue focus-within:border-skyBlue pr-9 w-full' />
                     <div className='absolute top-3 right-3 cursor-pointer ' onClick={fetchGeoLocation}><IoMdLocate size={20} /></div>
 
                     <div className='relative'>
-                        <ul className={`absolute top-1 w-full bg-white dark:bg-darkBlue z-10 ${(inputRef?.current?.value && inputRef?.current === document.activeElement) ? 'block' : 'hidden'} shadow-lg`}>
+                        <ul className={`absolute top-0 w-full bg-white dark:bg-darkBlue z-10 ${search.length ? 'block' : 'hidden'} shadow-lg`}
+                            ref={inputOptionRef}>
                             {
                                 (searchOption?.length && search != '')
                                     ? searchOption?.map((item: TypeSearchOptions, index: number) => (
@@ -166,13 +193,20 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
                     </div>
                 </div>
                 <div>
-                    <Link href={`/locations`} className=''
+                    <Link href={`/locations`}
                         title='Check previous locations'
                     >
                         <TbLocationCheck size={20} />
                     </Link>
                 </div>
             </section>
+            <div className='w-fit ml-auto mr-4 sm:mr-10'>
+                <button className='mt-3 text-sm p-2 sm:p-3 bg-darkBlue dark:bg-white text-white dark:text-darkBlue rounded-xl '
+                    onClick={resetTable}
+                >
+                    Reset Table
+                </button>
+            </div>
 
             <div className='m-4 sm:m-10 relative'>
                 <table className='w-full bg-white dark:bg-darkBlue rounded-3xl table-fixed '>
@@ -198,7 +232,8 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
                     <tbody className='p-4 dark:text-white/70 text-sm sm:text-base'>
                         {sortedData?.map((item, index) => (
                             <tr key={index} className=' odd:bg-lightBlue/50 dark:odd:bg-darkGray/10 hover:bg-skyBlue dark:hover:bg-skyBlue  hover:text-white dark:hover:text-white'
-                                onClick={() => router.push(`/weather/${item.coordinates.lat}/${item.coordinates.lon}`)}>
+                                onClick={() => router.push(`/weather/${item.coordinates.lat}/${item.coordinates.lon}`)}
+                            >
                                 <td className='p-4 hidden sm:block'>{item.geoname_id}</td>
                                 <td className='p-4 truncate ...'>
                                     <Link href={`/weather/${item.coordinates.lat}/${item.coordinates.lon}`}>{item.name}
@@ -209,6 +244,7 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
                                 <td className='p-4'>{item.population.toLocaleString()}</td>
                             </tr>
                         ))}
+                        {sortedData?.length == 0 && <tr className='text-center'><td colSpan={5} className='p-4'>No City found</td></tr>}
                     </tbody>
                 </table>
                 <div className={`absolute inset-0 cursor-pointer w-full h-full rounded-2xl backdrop-blur-sm bg-transparent ${loading ? 'block' : 'hidden'}`} />
@@ -216,15 +252,13 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
             </div>
 
 
-            <div ref={infinityRef} className={`${limit == 100 ? 'hidden' : 'block'}`} />
-            {limit == 100 && (
+            <div ref={infinityRef} className={`${sortedData?.length < limit || limit == 100 ? 'hidden' : 'block'}`} />
+            {sortedData?.length <= limit && (
                 <div className='w-fit mx-auto text-center pb-5'>
-                    No cities found. Please try searching.
+                    No cities found?. Please try searching.
                 </div>
             )}
-
-
-        </div >
+        </div>
     )
 }
 

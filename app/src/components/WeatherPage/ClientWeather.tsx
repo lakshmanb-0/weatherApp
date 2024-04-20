@@ -4,13 +4,15 @@ import { Navbar, Forecast, TodayWeather, WeatherCategory, Sunrise } from '../ind
 import { TypeWeatherData, TypeWeatherForecast } from '@/app/src/types';
 import { useDispatch } from 'react-redux';
 import { addLocalStorage, addPreviousLocation } from '@/app/src/store/dataSlice';
+import { createClient } from 'pexels';
 
 type Props = {
     weatherData: TypeWeatherData,
-    forecastData: TypeWeatherForecast
+    forecastData: TypeWeatherForecast,
+    videoUrl: string
 }
 
-const ClientWeather: FC<Props> = ({ weatherData, forecastData }) => {
+const ClientWeather: FC<Props> = ({ weatherData, forecastData, videoUrl }) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -27,15 +29,14 @@ const ClientWeather: FC<Props> = ({ weatherData, forecastData }) => {
             }
             dispatch(addPreviousLocation(data))
         }
-    }, [])
-
+    }, [weatherData.coord.lat, weatherData.coord.lon])
 
     return (
         <section className='h-screen w-full p-4 sm:p-7 max-Width'>
             <Navbar weatherData={weatherData} />
             <div className='grid md:grid-cols-2 gap-7 py-5 w-full'>
                 <div >
-                    <TodayWeather weatherData={weatherData} />
+                    <TodayWeather weatherData={weatherData} videoUrl={videoUrl} />
                     <WeatherCategory weatherData={weatherData} />
                     <Sunrise weatherData={weatherData} />
                 </div>
