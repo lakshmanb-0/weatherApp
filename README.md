@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Weather Forecast Web Application
 
-## Getting Started
+This project consists of a web application that displays weather forecasts and city data using Nextjs, TypeScript, and Redux. The primary features include a searchable and sortable table of cities, along with detailed weather information for each selected city.
 
-First, run the development server:
+# Description
+
+The application allows users to explore a vast list of cities and access up-to-date weather forecasts. Users can interact with a dynamically populated table of cities with infinite scroll capabilities, leveraging a public API for city data.[limit is 100 entries] By selecting a city, users can view current weather conditions and forecasts provided by the OpenWeatherMap API.
+
+# Core Features
+
+- Display a table listing cities with infinite scroll
+- Search-as-you-type with autocomplete suggestions.
+- Filter and sorting options for each column.
+- Track history of viewed locations and manage favorite locations for quick access.
+- Allow users to switch between measurement units (Celsius/Fahrenheit, metric/imperial).
+
+# APIs Used
+
+- Cities Data: Open Public API
+- Weather Data: OpenWeatherMap API (requires API key registration)
+
+# Env File
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+NEXT_WEATHER_APP_KEY="YOUR_OPENWEATHERMAP_API_KEY"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Cloning the Repository
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To clone this repository, run the following command in your terminal:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+git clone https://github.com/lakshmanb-0/weatherApp.git
+```
 
-## Learn More
+Usage
+Provide instructions on how to use the project after cloning:
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+cd weatherApp
+npm install
+npm run dev
+```
