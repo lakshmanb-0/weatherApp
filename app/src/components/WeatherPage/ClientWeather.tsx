@@ -4,7 +4,6 @@ import { Navbar, Forecast, TodayWeather, WeatherCategory, Sunrise } from '../ind
 import { TypeWeatherData, TypeWeatherForecast } from '@/app/src/types';
 import { useDispatch } from 'react-redux';
 import { addLocalStorage, addPreviousLocation } from '@/app/src/store/dataSlice';
-import { createClient } from 'pexels';
 
 type Props = {
     weatherData: TypeWeatherData,
