@@ -1,4 +1,5 @@
 # Weather Forecast Web Application
+<img src= 'https://i.postimg.cc/y6Qcq7Xn/879shots-so.png' />
 
 This project consists of a web application that displays weather forecasts and city data using Nextjs, TypeScript, and Redux. The primary features include a searchable and sortable table of cities, along with detailed weather information for each selected city.
 
