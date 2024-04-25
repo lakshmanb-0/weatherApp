@@ -12,7 +12,7 @@ const page = async ({ params: { lat, lon } }: { params: { lat: number, lon: numb
     const [metricWeatherData, metricForecastData] = await Promise.all([WeatherData, ForecastData])
 
     if (!metricWeatherData?.coord && !metricForecastData?.list?.[0]?.coord) {
-        return <div className='text-red-500 w-full grid place-items-center h-screen text-center text-xl px-2'>Something's wrong! <br /> Please check your network.</div>
+        return <div className='text-red-500 w-full grid place-items-center h-screen text-center text-xl px-2'>{`Something's wrong!`} <br />{` Please check your network`}.</div>
     }
 
     // revalidate after 20 minutes
