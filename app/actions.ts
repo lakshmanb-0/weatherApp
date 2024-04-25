@@ -21,7 +21,7 @@ export const getSearchData = async (filter: string) => {
 }
 
 export const getForecastWeather = async (coordinates: { lat: number, lon: number }, units: string) => {
-    let data = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${coordinates.lat}&lon=${coordinates.lon}&&appid=${process.env.NEXT_WEATHER_APP_KEY}&units=${units}`)
+    let data = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${coordinates.lat}&lon=${coordinates.lon}&&appid=${process.env.NEXT_WEATHER_APP_KEY}&units=${units}`, { next: { tags: ['weather'] } })
         .then(response => response.json())
         .then(data => {
             return data
@@ -31,7 +31,7 @@ export const getForecastWeather = async (coordinates: { lat: number, lon: number
     return data
 }
 export const getBasicWeather = async (coordinates: { lat: number, lon: number }, units: string) => {
-    let data = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${coordinates.lat}&lon=${coordinates.lon}&&appid=${process.env.NEXT_WEATHER_APP_KEY}&units=${units}`)
+    let data = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${coordinates.lat}&lon=${coordinates.lon}&&appid=${process.env.NEXT_WEATHER_APP_KEY}&units=${units}`, { next: { tags: ['weather'] } })
         .then(response => response.json())
         .then(data => {
             return data
@@ -42,7 +42,7 @@ export const getBasicWeather = async (coordinates: { lat: number, lon: number },
 }
 
 export const getAirCondition = async (coordinates: { lat: number, lon: number }, units: string) => {
-    let data = await fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${coordinates.lat}&lon=${coordinates.lon}&&appid=${process.env.NEXT_WEATHER_APP_KEY}&units=${units}`)
+    let data = await fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${coordinates.lat}&lon=${coordinates.lon}&&appid=${process.env.NEXT_WEATHER_APP_KEY}&units=${units}`, { next: { tags: ['weather'] } })
         .then(response => response.json())
         .then(data => {
             return data.list[0]

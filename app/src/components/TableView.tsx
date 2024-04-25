@@ -1,24 +1,22 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
-import { TypeGeoNames, TypeSearchOptions } from '../types'
-import { getGeoNames, getSearchData } from '../../actions'
+import { TypeGeoNames } from '../types'
+import { getGeoNames } from '../../actions'
 import Link from 'next/link'
-import { IoMdLocate } from "react-icons/io";
 import { useRouter } from 'next/navigation'
 import { useToast } from '../hooks/useToast'
 import { TbLocationCheck } from 'react-icons/tb'
+import Search from './Search'
 
 const TableView = ({ data }: { data: TypeGeoNames[] }) => {
     const [sortedData, setSortedData] = useState<TypeGeoNames[]>(data)
     const [filter, setFilter] = useState<string>('limit')
     const [search, setSearch] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
-    const [searchOption, setSearchOption] = useState<TypeSearchOptions[]>([])
     const [limit, setLimit] = useState<number>(20)
     const [searchQuery, setSearchQuery] = useState('')
     const infinityRef = useRef<HTMLDivElement>(null)
-    const inputOptionRef = useRef<HTMLUListElement>(null)
     const router = useRouter()
     const showToast = useToast()
 
@@ -42,7 +40,7 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
             if (first.isIntersecting) {
                 setLimit(prev => prev + 10)
             }
-        }, { threshold: 1.0 });
+        }, { threshold: 0.1 });
 
         if (infinityRef.current) {
             observer.observe(infinityRef.current);
@@ -113,15 +111,6 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
         }
     }
 
-    // Handle Search input on change and update search option 
-    useEffect(() => {
-        const handleSearchData = async () => {
-            let data = (search == '' ? [] : await getSearchData(search))
-            setSearchOption(data)
-        }
-        search.length && handleSearchData()
-    }, [search])
-
     // Handle Search input on enter key press and update search query state with user input value
     const handleSearchEnter = async (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && search.length > 0) {
@@ -133,18 +122,6 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
         }
     }
 
-    // Fetch Geo Location based on user permission
-    const fetchGeoLocation = () => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                ({ coords: { latitude, longitude } }) => {
-                    router.push(`/weather/${latitude}/${longitude}`);
-                },
-                () => showToast('Please allow location access', 'error')
-            );
-        }
-    };
-
     // Reset Table
     const resetTable = () => {
         setFilter('')
@@ -155,43 +132,8 @@ const TableView = ({ data }: { data: TypeGeoNames[] }) => {
 
     return (
         <div>
-            <section className='w-fit mx-auto flex mt-5 sm:mt-10 items-center gap-4 px-2'>
-                <div className='relative'
-                    onMouseLeave={() => {
-                        if (inputOptionRef && inputOptionRef.current) {
-                            inputOptionRef.current.style.display = 'none';
-                        }
-                    }}
-                    onMouseEnter={() => {
-                        if (inputOptionRef && inputOptionRef.current) {
-                            inputOptionRef.current.style.display = 'block';
-                        }
-                    }}
-                >
-                    <input type="text"
-                        placeholder='Search'
-                        value={search}
-                        onKeyDown={handleSearchEnter}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className='px-3 py-2 rounded-3xl outline-none border-2 border-transparent dark:bg-darkBlue focus-within:border-skyBlue pr-9 w-full' />
-                    <div className='absolute top-3 right-3 cursor-pointer ' onClick={fetchGeoLocation}><IoMdLocate size={20} /></div>
-
-                    <div className='relative'>
-                        <ul className={`absolute top-0 w-full bg-white dark:bg-darkBlue z-10 ${search.length ? 'block' : 'hidden'} shadow-lg`}
-                            ref={inputOptionRef}>
-                            {
-                                (searchOption?.length && search != '')
-                                    ? searchOption?.map((item: TypeSearchOptions, index: number) => (
-                                        <li key={index} className='px-3 py-2 hover:bg-gray-100 dark:hover:bg-skyBlue'>
-                                            <Link href={`/weather/${item.coordinates.lat}/${item.coordinates.lon}`} className='block' replace>{item.name + ', ' + item.cou_name_en}
-                                            </Link>
-                                        </li>
-                                    ))
-                                    : (search !== '' && <li className='py-1'>No data found</li>)
-                            }
-                        </ul>
-                    </div>
-                </div>
+            <section className='w-full flex justify-center mt-5 sm:mt-10 items-center gap-4 px-2'>
+                <Search search={search} setSearch={setSearch} handleSearchEnter={handleSearchEnter} />
                 <div>
                     <Link href={`/locations`}
                         title='Check previous locations'

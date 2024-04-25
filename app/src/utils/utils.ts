@@ -1,3 +1,14 @@
+export const myDebounce = (fn: any, delay: number = 400) => {
+    let timeoutId: any;
+
+    return (...args: any) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            fn(...args);
+        }, delay);
+    };
+};
+
 
 export const toggleUnits = (temperature: number, unitSystem: string) => {
     let roundedTemperature = Math.round(temperature);

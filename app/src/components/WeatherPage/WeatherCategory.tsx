@@ -19,7 +19,7 @@ const WeatherCategory: FC<{ weatherData: TypeWeatherData }> = ({ weatherData }) 
     useEffect(() => {
         const fetchAir = async (lat: number, lon: number) => {
             let airCondition = await getAirCondition({ lat, lon }, 'imperial')
-            setAirCondition(airCondition.main.aqi)
+            setAirCondition(airCondition?.main?.aqi)
         }
         fetchAir(weatherData.coord.lat, weatherData.coord.lon)
     }, [])

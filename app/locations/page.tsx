@@ -16,7 +16,7 @@ const Page = () => {
 
     useEffect(() => {
         dispatch(addLocalStorage())
-    }, [dispatch])
+    }, [])
 
     const renderLocation = (location: previousLocations, index: number) => (
         <Link href={`/weather/${location.lat}/${location.lon}`} key={index} className='max-w-sm block '>

@@ -20,6 +20,13 @@ const TodayWeather: FC<{ weatherData: TypeWeatherData, videoUrl: string }> = ({ 
         }, 10000)
         return () => clearInterval(interval)
     }, [])
+    // console.log(moment().format('dddd, hh:mm A'));
+    // console.log(weatherData.dt);
+    // console.log(moment(weatherData.dt * 1000).format('dddd, hh:mm A'));
+
+    // const today = moment().startOf('day');
+    // const prevDate = moment(weatherData.dt * 1000).startOf('day');
+    // console.log(today.diff(prevDate, 'days'));
 
 
     return (
