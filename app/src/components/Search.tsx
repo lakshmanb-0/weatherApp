@@ -1,6 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useToast } from '../hooks/useToast'
 import { getSearchData } from '@/app/actions'
 import { TypeSearchOptions } from '../types'
@@ -8,7 +8,13 @@ import Link from 'next/link'
 import { IoMdLocate } from 'react-icons/io'
 import { myDebounce } from '../utils/utils'
 
-const Search = ({ search, setSearch, handleSearchEnter }: { search: string, setSearch: React.Dispatch<React.SetStateAction<string>>, handleSearchEnter: (e: React.KeyboardEvent<HTMLInputElement>) => void }) => {
+type Props = {
+    search: string
+    onChangeSearch: (e: React.ChangeEvent<HTMLInputElement>) => void
+    handleSearchEnter: (e: React.KeyboardEvent<HTMLInputElement>) => void
+}
+
+const Search: React.FC<Props> = ({ search, onChangeSearch, handleSearchEnter }) => {
     const inputOptionRef = useRef<HTMLUListElement>(null)
     const router = useRouter()
     const showToast = useToast()
@@ -26,37 +32,48 @@ const Search = ({ search, setSearch, handleSearchEnter }: { search: string, setS
         }
     };
 
-    // setSearch ans searchOption state after user pause typing for 400ms
-    const debouncedHandleSearchData = myDebounce(async (e: React.ChangeEvent<HTMLInputElement>) => {
-        let { value } = e.target
-        setSearch(value);
+    // Update searchOption state after user pause typing for 400ms
+    const debouncedHandleSearchData = myDebounce(async (value: string) => {
         let data = (value == '' ? [] : await getSearchData(value))
         setSearchOption(data)
     }, 400)
 
+    useEffect(() => {
+        search.length && debouncedHandleSearchData(search)
+        return () => {
+            debouncedHandleSearchData.cancel()
+        }
+    }, [search])
+
+
+    //search options show or not
+    const mouseEvent = (display: string) => {
+        if (inputOptionRef && inputOptionRef.current) {
+            inputOptionRef.current.style.display = display
+        }
+    }
 
     return (
         <div className='relative w-fit'
-            onMouseLeave={() => {
-                if (inputOptionRef && inputOptionRef.current) {
-                    inputOptionRef.current.style.display = 'none';
-                }
-            }}
-            onMouseEnter={() => {
-                if (inputOptionRef && inputOptionRef.current) {
-                    inputOptionRef.current.style.display = 'block';
-                }
-            }}
+            onMouseLeave={() => mouseEvent('none')}
+            onMouseEnter={() => mouseEvent('block')}
         >
             <input type="text"
                 placeholder='Search'
+                value={search}
                 onKeyDown={handleSearchEnter}
-                onChange={debouncedHandleSearchData}
-                className='px-3 py-2 rounded-3xl outline-none border-2 border-transparent dark:bg-darkBlue focus-within:border-skyBlue pr-9 w-full' />
-            <div className='absolute top-3 right-3 cursor-pointer ' onClick={fetchGeoLocation}><IoMdLocate size={20} /></div>
+                onChange={onChangeSearch}
+                className='px-3 py-2 rounded-3xl outline-none border-2 border-transparent dark:bg-darkBlue focus-within:border-skyBlue pr-9 w-full'
+            />
+            <IoMdLocate
+                size={20}
+                title='Current Location'
+                className='absolute top-3 right-3 cursor-pointer '
+                onClick={fetchGeoLocation}
+            />
 
             <div className='relative'>
-                <ul className={`absolute top-0 w-full bg-white dark:bg-darkBlue z-10 ${search.length ? 'block' : 'hidden'} shadow-lg`}
+                <ul className={`absolute top-0 w-full bg-white dark:bg-darkBlue z-10 hidden shadow-lg`}
                     ref={inputOptionRef}>
                     {
                         (searchOption?.length && search != '')
@@ -74,4 +91,4 @@ const Search = ({ search, setSearch, handleSearchEnter }: { search: string, setS
     )
 }
 
-export default Search
+export default React.memo(Search)

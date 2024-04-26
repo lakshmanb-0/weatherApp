@@ -3,7 +3,11 @@ import moment from 'moment'
 import React, { FC } from 'react'
 import { FiSunrise, FiSunset } from "react-icons/fi";
 
-const Sunrise: FC<{ weatherData: TypeWeatherData }> = ({ weatherData }) => {
+type Props = {
+    weatherData: TypeWeatherData
+}
+
+const Sunrise: FC<Props> = ({ weatherData }) => {
     const { sunrise, sunset } = weatherData.sys
 
     // format time for sunrise and sunset time 

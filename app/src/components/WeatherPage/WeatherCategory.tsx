@@ -11,7 +11,10 @@ import { FaTemperatureHigh } from "react-icons/fa";
 import { TbCircuitGround } from "react-icons/tb";
 import { useSelector } from 'react-redux';
 
-const WeatherCategory: FC<{ weatherData: TypeWeatherData }> = ({ weatherData }) => {
+type Props = {
+    weatherData: TypeWeatherData
+}
+const WeatherCategory: FC<Props> = ({ weatherData }) => {
     const unitSystem = useSelector((state: RootState) => state.units);
     const [airCondition, setAirCondition] = useState<number>(0)
 
@@ -30,7 +33,6 @@ const WeatherCategory: FC<{ weatherData: TypeWeatherData }> = ({ weatherData }) 
             icon: TiWeatherWindyCloudy,
             value: airQuality(airCondition),
             endValue: '',
-
         },
         {
             title: 'Wind',

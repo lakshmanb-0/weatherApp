@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit"
 const initialState = {
     previousLocations: [] as previousLocations[],
     units: 'metric',
-    tableData: []
 }
 
 export type previousLocations = {
@@ -22,9 +21,6 @@ export const dataSlice = createSlice({
     reducers: {
         setUnits: (state, action) => {
             state.units = action.payload;
-        },
-        setTableData: (state, action) => {
-            state.tableData = action.payload
         },
         addLocalStorage: (state) => {
             state.previousLocations = JSON.parse(localStorage.getItem('previousLocations')!)
@@ -60,5 +56,5 @@ export const dataSlice = createSlice({
     }
 })
 
-export const { setUnits, addPreviousLocation, toggleFavoriteLocation, addLocalStorage, setTableData } = dataSlice.actions
+export const { setUnits, addPreviousLocation, toggleFavoriteLocation, addLocalStorage } = dataSlice.actions
 export default dataSlice.reducer

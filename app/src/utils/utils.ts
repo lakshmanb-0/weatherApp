@@ -1,15 +1,31 @@
+// debounce function 
 export const myDebounce = (fn: any, delay: number = 400) => {
     let timeoutId: any;
 
-    return (...args: any) => {
-        clearTimeout(timeoutId);
+    const debouncedFn = (...args: any) => {
         timeoutId = setTimeout(() => {
             fn(...args);
         }, delay);
     };
+    debouncedFn.cancel = () => {
+        clearTimeout(timeoutId);
+    }
+    return debouncedFn;
 };
 
+//throttle function 
+export const myThrottle = (fn: any, delay: number = 1000) => {
+    let prev = 0;
+    return (...args: any) => {
+        const now = new Date().getTime();
+        if (now - prev >= delay) {
+            fn(...args);
+            prev = now;
+        }
+    };
+}
 
+// convert celsius to fahrenheit and vice versa 
 export const toggleUnits = (temperature: number, unitSystem: string) => {
     let roundedTemperature = Math.round(temperature);
 
@@ -21,6 +37,7 @@ export const toggleUnits = (temperature: number, unitSystem: string) => {
     return roundedTemperature;
 }
 
+// convert degree to wind direction and m/s or mph
 export const toggleWind = (wind: number, degree: number, unitSystem: string) => {
     let windDirection = calculateWindDirection(degree);
     if (unitSystem === 'imperial') {
@@ -39,6 +56,7 @@ export const calculateWindDirection = (degrees: number) => {
     return windDirections[directionIndex];
 }
 
+// get air quality
 export const airQuality = (aqi: number) => {
     switch (aqi) {
         case 0:
@@ -55,6 +73,8 @@ export const airQuality = (aqi: number) => {
             return 'Unknown'
     }
 }
+
+// get weather image
 export const getImageWeather = (IconCode: string) => {
     switch (IconCode) {
         case "01d":

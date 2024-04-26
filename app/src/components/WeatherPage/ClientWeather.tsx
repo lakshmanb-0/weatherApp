@@ -28,7 +28,7 @@ const ClientWeather: FC<Props> = ({ weatherData, forecastData, videoUrl }) => {
             }
             dispatch(addPreviousLocation(data))
         }
-    }, [weatherData.coord.lat, weatherData.coord.lon])
+    }, [])
 
     return (
         <section className='h-screen w-full p-4 sm:p-7 max-Width'>

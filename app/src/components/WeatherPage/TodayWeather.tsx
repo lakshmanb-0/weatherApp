@@ -8,7 +8,11 @@ import Image from 'next/image'
 import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-const TodayWeather: FC<{ weatherData: TypeWeatherData, videoUrl: string }> = ({ weatherData, videoUrl }) => {
+type Props = {
+    weatherData: TypeWeatherData,
+    videoUrl: string
+}
+const TodayWeather: FC<Props> = ({ weatherData, videoUrl }) => {
     const unitSystem = useSelector((state: RootState) => state.units)
     const [currentTime, setCurrentTime] = useState<string>(moment().format('dddd, hh:mm A'))
     const dispatch = useDispatch()
@@ -20,13 +24,6 @@ const TodayWeather: FC<{ weatherData: TypeWeatherData, videoUrl: string }> = ({ 
         }, 10000)
         return () => clearInterval(interval)
     }, [])
-    // console.log(moment().format('dddd, hh:mm A'));
-    // console.log(weatherData.dt);
-    // console.log(moment(weatherData.dt * 1000).format('dddd, hh:mm A'));
-
-    // const today = moment().startOf('day');
-    // const prevDate = moment(weatherData.dt * 1000).startOf('day');
-    // console.log(today.diff(prevDate, 'days'));
 
 
     return (

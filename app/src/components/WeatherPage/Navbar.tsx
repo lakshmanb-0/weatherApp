@@ -9,13 +9,17 @@ import { GoHeart, GoHeartFill } from "react-icons/go";
 import { TbLocationCheck } from "react-icons/tb";
 import { IoIosArrowBack } from 'react-icons/io'
 import { useRouter } from 'next/navigation'
+import { useToast } from '../../hooks/useToast'
 
-const Navbar: FC<{ weatherData: TypeWeatherData }> = ({ weatherData }) => {
+type Props = {
+    weatherData: TypeWeatherData
+}
+const Navbar: FC<Props> = ({ weatherData }) => {
     const prevLocations = useSelector((state: RootState) => state.previousLocations ?? [])
+    const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
     const router = useRouter()
     const dispatch = useDispatch()
-    const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
-
+    const showToast = useToast()
 
     // Toggle Dark Mode
     const toggleDarkMode = () => {
