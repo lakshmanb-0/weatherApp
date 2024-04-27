@@ -210,7 +210,7 @@ const TableView: React.FC<{ data: TypeGeoNames[] }> = ({ data }) => {
                         }
                     </tbody>
                 </table>
-                <div className={`absolute inset-0 cursor-pointer w-full h-full rounded-2xl backdrop-blur-sm bg-transparent ${(loading && searchQuery.length) ? 'block' : 'hidden'}`} />
+                <div className={`absolute inset-0 cursor-pointer w-full h-full rounded-2xl backdrop-blur-sm bg-transparent ${(loading && searchQuery.length && limit <= 30) ? 'block' : 'hidden'}`} />
             </div>
 
             <div>

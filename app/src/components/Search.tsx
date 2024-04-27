@@ -20,6 +20,19 @@ const Search: React.FC<Props> = ({ search, onChangeSearch, handleSearchEnter }) 
     const showToast = useToast()
     const [searchOption, setSearchOption] = useState<TypeSearchOptions[]>([])
 
+    useEffect(() => {
+        search.length && debouncedHandleSearchData(search)
+        return () => {
+            debouncedHandleSearchData.cancel()
+        }
+    }, [search])
+
+    // Update searchOption state after user pause typing for 400ms
+    const debouncedHandleSearchData = myDebounce(async (value: string) => {
+        let data = (value == '' ? [] : await getSearchData(value))
+        setSearchOption(data)
+    }, 400)
+
     // Fetch Geo Location based on user permission
     const fetchGeoLocation = () => {
         if (navigator.geolocation) {
@@ -31,20 +44,6 @@ const Search: React.FC<Props> = ({ search, onChangeSearch, handleSearchEnter }) 
             );
         }
     };
-
-    // Update searchOption state after user pause typing for 400ms
-    const debouncedHandleSearchData = myDebounce(async (value: string) => {
-        let data = (value == '' ? [] : await getSearchData(value))
-        setSearchOption(data)
-    }, 400)
-
-    useEffect(() => {
-        search.length && debouncedHandleSearchData(search)
-        return () => {
-            debouncedHandleSearchData.cancel()
-        }
-    }, [search])
-
 
     //search options show or not
     const mouseEvent = (display: string) => {
