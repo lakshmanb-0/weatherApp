@@ -18,8 +18,8 @@ const Page = () => {
         dispatch(addLocalStorage())
     }, [])
 
-    const renderLocation = (location: previousLocations, index: number) => (
-        <Link href={`/weather/${location.lat}/${location.lon}`} key={index} className='max-w-sm block '>
+    const renderLocation = (location: previousLocations) => (
+        <Link href={`/weather/${location.lat}/${location.lon}`} key={location.lat + location.lon} className='max-w-sm block '>
             <div className={`${location.favorite ? 'bg-green-400 text-white' : 'bg-white dark:bg-darkBlue'} p-3 my-3 rounded-xl cursor-pointer hover:bg-skyBlue hover:text-white flex items-center justify-between max-w-sm h-[72px]`}>
                 <div className='font-semibold text-base leading-5'>
                     <h1>{`${location.cityName}, ${location.country}`}</h1>

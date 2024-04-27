@@ -29,6 +29,8 @@ const TableView: React.FC<{ data: TypeGeoNames[] }> = ({ data }) => {
             let value = session.searchQuery.replace(/^.*"(.*)".*$/, '$1');
             setSearch(value)
         }
+        else setLimit(20)
+
 
 
         // intersection observer for infinity scroll
@@ -110,7 +112,10 @@ const TableView: React.FC<{ data: TypeGeoNames[] }> = ({ data }) => {
         setSortedData(filterData)
     }
     // Handle onclick of filter option 
-    const handleFilter = (filterOption: string) => {
+    const handleFilter = (e: React.MouseEvent<HTMLElement>) => {
+        let { innerText } = e.target as HTMLElement
+        let filterOption = innerText.replace(/[^a-zA-Z]/g, '').toLowerCase()
+
         switch (filterOption) {
             case 'name':
                 setFilter(prev => prev === 'name ASC' ? 'name DESC' : 'name ASC')
@@ -180,17 +185,17 @@ const TableView: React.FC<{ data: TypeGeoNames[] }> = ({ data }) => {
                     <thead >
                         <tr className='border-b-2 text-left text-sm sm:text-xl font-bold border-b-gray-100'>
                             <th className='p-5 hidden sm:block'>Id</th>
-                            <th className='p-5 cursor-pointer' onClick={() => handleFilter('name')}>
+                            <th className='p-5 cursor-pointer' onClick={handleFilter}>
                                 Name
                                 {filter.includes('name ASC') ? <>&#8693;</> : <>&#8645;</>}
                             </th>
-                            <th className='p-5 cursor-pointer' onClick={() => handleFilter('country')}>
+                            <th className='p-5 cursor-pointer' onClick={handleFilter}>
                                 Country
                                 {filter.includes('country ASC') ? <>&#8693;</> : <>&#8645;</>}
 
                             </th>
                             <th className='p-5 hidden sm:block'>Timezone</th>
-                            <th className='p-5 cursor-pointer truncate ...' onClick={() => handleFilter('population')}>
+                            <th className='p-5 cursor-pointer truncate ...' onClick={handleFilter}>
                                 Population
                                 {filter.includes('population ASC') ? <>&#8693;</> : <>&#8645;</>}
                             </th>
@@ -198,8 +203,8 @@ const TableView: React.FC<{ data: TypeGeoNames[] }> = ({ data }) => {
                     </thead>
                     <tbody className='p-4 dark:text-white/70 text-sm sm:text-base'>
                         {!!sortedData?.length
-                            ? sortedData?.map((item, index) => (
-                                <TableRows item={item} key={index} />
+                            ? sortedData?.map((item) => (
+                                <TableRows item={item} key={item.geoname_id} />
                             ))
                             : <tr className='text-center'><td colSpan={5} className='p-4'>No City found</td></tr>
                         }

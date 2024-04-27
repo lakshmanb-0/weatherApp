@@ -77,13 +77,13 @@ const Search: React.FC<Props> = ({ search, onChangeSearch, handleSearchEnter }) 
                     ref={inputOptionRef}>
                     {
                         (searchOption?.length && search != '')
-                            ? searchOption?.map((item: TypeSearchOptions, index: number) => (
-                                <li key={index} className='px-3 py-2 hover:bg-gray-100 dark:hover:bg-skyBlue'>
+                            ? searchOption?.map((item: TypeSearchOptions) => (
+                                <li key={item.coordinates.lat + item.coordinates.lon} className='px-3 py-2 hover:bg-gray-100 dark:hover:bg-skyBlue'>
                                     <Link href={`/weather/${item.coordinates.lat}/${item.coordinates.lon}`} className='block' replace>{item.name + ', ' + item.cou_name_en}
                                     </Link>
                                 </li>
                             ))
-                            : (search !== '' && <li className='py-1'>No data found</li>)
+                            : (search !== '' && <li className='px-3 py-2'>No data found</li>)
                     }
                 </ul>
             </div>

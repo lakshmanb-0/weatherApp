@@ -41,7 +41,7 @@ const DayList = ({ forecastDays, selectedDay, onDaySelect }: { forecastDays: str
     <ul className='flex flex-wrap justify-center gap-3 py-5'>
         {forecastDays.map((day, index) => (
             <li
-                key={index}
+                key={day}
                 onClick={() => onDaySelect(day)}
                 className={`${selectedDay === day ? 'text-skyBlue' : 'text-darkGray'} cursor-pointer`}
             >
@@ -54,9 +54,9 @@ const DayList = ({ forecastDays, selectedDay, onDaySelect }: { forecastDays: str
 // Component for displaying the forecast for the selected day
 const ForecastList = ({ forecastData, selectedDay }: { forecastData: TypeWeatherForecast, selectedDay: string }) => (
     <div>
-        {forecastData.list?.map((item: TypeWeatherData, index: number) =>
+        {forecastData.list?.map((item: TypeWeatherData) =>
             moment(item.dt_txt).format('dddd') === selectedDay && (
-                <ForecastItem item={item} key={index} />
+                <ForecastItem item={item} key={item.dt} />
             )
         )}
     </div>
@@ -68,10 +68,12 @@ const ForecastItem = ({ item }: { item: TypeWeatherData }) => {
     const { speed, deg } = wind;
     const units = useSelector((state: RootState) => state.units);
 
+    const imageUrl = getImageWeather(weather[0].icon)
+
     return (
         <div className='grid grid-cols-2 items-center gap-2 border-b-[1px] border-lightGray/20 py-4 px-2 last:border-0'>
             <div className='flex flex-col sm:flex-row items-center text-center sm:text-left gap-2 border-r-[1px] border-lightGray/20 sm:px-4'>
-                <Image src={getImageWeather(weather[0].icon)} alt={item.weather[0].main} width={50} height={50} className='size-14' />
+                <Image src={imageUrl} alt={item.weather[0].main} width={50} height={50} className='size-14' />
                 <div>
                     <p>{moment(item.dt_txt).format('hh A')}</p>
                     <p className='capitalize'>{item.weather[0].description}</p>
